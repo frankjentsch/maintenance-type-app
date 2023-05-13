@@ -1,0 +1,28 @@
+projection;
+strict ( 2 );
+use draft;
+use side effects;
+
+define behavior for ZC_MaintType_S alias MaintTypeAll
+
+{
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+  use action SelectCustomizingTransptReq;
+
+  use association _MaintType { create; with draft; }
+}
+
+define behavior for ZC_MaintType alias MaintType
+
+{
+  use update;
+  use delete;
+
+  use action validateExtRefFormat;
+
+  use association _MaintTypeAll { with draft; }
+}

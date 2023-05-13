@@ -1,0 +1,4 @@
+define service ZUI_MAINT_TYPE {
+  expose ZC_MAINTTYPE_S as MaintTypeAll;
+  expose ZC_MAINTTYPE as MaintType;
+}

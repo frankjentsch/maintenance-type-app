@@ -1,0 +1,61 @@
+@Metadata.layer: #CUSTOMER
+@UI: {
+  headerInfo: {
+    typeName: 'Maintenance Type', 
+    typeNamePlural: 'Maintenance Types', 
+    title: {
+      type: #STANDARD, 
+      label: 'Maintenance Type', 
+      value: 'MaintTypeCode'
+    }
+  }
+}
+annotate view ZC_MaintType with
+{
+  @UI.identification: [ {
+    position: 1 , 
+    label: 'Code'
+  } ]
+  @UI.lineItem: [ {
+    position: 1 , 
+    label: 'Code'
+  } ]
+  @UI.facet: [ {
+    id: 'ZI_MaintType', 
+    purpose: #STANDARD, 
+    type: #IDENTIFICATION_REFERENCE, 
+    label: 'Code', 
+    position: 1 
+  } ]
+  MaintTypeCode;
+  
+  @UI.identification: [ {
+    position: 2 
+  } ]
+  @UI.lineItem: [ {
+    position: 2 
+  } ]
+  ExternalReference;
+  
+  @UI.identification: [ {
+    position: 3 
+  } ]
+  @UI.lineItem: [ {
+    position: 3 
+  } ]
+  Title;
+  
+  @UI.identification: [ {
+    position: 4 
+  } ]
+  @UI.lineItem: [ {
+    position: 4 
+  } ]
+  @UI.multiLineText: true
+  Description;
+  
+  @UI.identification: [ {
+    position: 5 
+  } ]
+  LastChangedAt;
+}

@@ -1,0 +1,74 @@
+managed with additional save implementation in class ZBP_I_MAINT_TYPE_S unique;
+strict(2);
+with draft;
+
+define behavior for ZI_MaintType_S alias MaintTypeAll
+draft table ZMAINT_TYPE_D_S
+with unmanaged save
+lock master total etag LastChangedAtMax
+authorization master( global )
+
+{
+  field ( readonly )
+   SingletonID;
+
+
+  update;
+  internal create;
+  internal delete;
+
+  draft action ( features : instance ) Edit;
+  draft action Activate;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare;
+  action ( features : instance ) SelectCustomizingTransptReq parameter D_SelectCustomizingTransptReqP result [1] $self;
+
+  association _MaintType { create ( features : instance ); with draft; }
+}
+
+define behavior for ZI_MaintType alias MaintType
+persistent table ZMAINT_TYPE
+draft table ZMAINT_TYPE_D
+etag master LocalLastChangedAt
+lock dependent by _MaintTypeAll
+authorization dependent by _MaintTypeAll
+
+{
+  field ( mandatory : create )
+   MaintTypeCode;
+
+  field ( readonly )
+   SingletonID,
+   LastChangedAt,
+   LocalLastChangedAt;
+
+  field ( readonly : update )
+   MaintTypeCode;
+
+
+  update( features : global );
+  delete( features : global );
+
+  validation validateExtRef on save { create; update; field ExternalReference; }
+
+  determine action validateExtRefFormat { validation validateExtRef; }
+
+  side effects {
+    determine action validateExtRefFormat executed on field ExternalReference affects messages;
+  }
+
+  mapping for ZMAINT_TYPE
+  {
+    MaintTypeCode = MAINT_TYPE_CODE;
+    ExternalReference = EXT_REF;
+    Title = TITLE;
+    Description = DESCRIPTION;
+    LastChangedAt = LAST_CHANGED_AT;
+    LocalLastChangedAt = LOCAL_LAST_CHANGED_AT;
+  }
+
+  association _MaintTypeAll { with draft; }
+
+  validation ValidateTransportRequest on save ##NOT_ASSIGNED_TO_DETACT { create; update; delete; }
+}
